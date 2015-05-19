@@ -1,2 +1,2 @@
-# custombot
-A bot
+# Custombot
+A tool for easily creating IRC bots
