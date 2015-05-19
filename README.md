@@ -1,0 +1,2 @@
+# custombot
+A bot
