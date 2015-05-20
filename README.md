@@ -24,4 +24,4 @@ Listenes for event `event` and calls `callback`. Warning: Only one callback is a
 When raw data is recived from the server, this callback is called with the parameter `data`
 
 ## event `connect`
-Once the client has recived the `xxx :is now your hidden host` message. No parameters are passed to this function
+WIP - Once the client has recived the `End of /MOTD command` message. No parameters are passed to this function
