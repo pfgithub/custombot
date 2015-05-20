@@ -4,7 +4,7 @@ A tool for easily creating IRC bots
 ## Usage
 No work has been done at custombot at this time.
 
-# IRC API (Getting there!)
+# IRC API
 
 ## New IRC
 `var bot = new irc(ip,port,nick);`
@@ -25,3 +25,13 @@ When raw data is recived from the server, this callback is called with the param
 
 ## event `connect`
 WIP - Once the client has recived the `End of /MOTD command` message. No parameters are passed to this function
+
+## event `pm`
+`function(message,user){`
+
+May not work, is called on a `PRIVMSG` to your bot
+
+## event `chat`
+`function(message,user,channel){`
+
+Called on a chat message
