@@ -1,9 +1,8 @@
 {
-  "name": "irc-api",
+  "name": "custombot",
   "version": "0.0.1",
-  "description": "An api for IRC connections",
+  "description": "A tool for creating custom IRC bots",
   "dependencies": {
-    "irc-message": "^3.0.1"
   },
   "repository": {
     "type": "git",
