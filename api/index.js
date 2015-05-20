@@ -2,13 +2,64 @@ var net = require('net');
 function irc (ip,port,name) {
 	this.client = new net.Socket();
 	this.nick = name;
+	this.events = {};
+	this.connected = false;
 	
 	this.send = function(data){
 		if(this.client.writable){
-			console.log('I>'+data);
-			this.client.write(data);
+			this.client.write(data + '\n', 'ascii', function(err){
+				if(err){
+					console.log(err);
+				}else{
+					console.log("I>"+data);
+				}
+			});
 		}else{
 			console.log('ERROR - Socket not writable');
+		}
+	};
+	
+	this.command = function(command, data, message){
+		this.send(command.toUpperCase() + ' ' + data + (message === undefined ? '' : (' :' + message)));
+	};
+	
+	this.say = function(channel, message){
+		this.command('privmsg', channel, message);
+	};
+	
+	this.join = function(channel){
+		this.command('join', channel);
+	};
+	
+	this.part = function(channel){
+		this.command('part', channel);
+	};
+	
+	this.on = function(event,callback){
+		switch (event) {
+			case 'chat':
+				
+				break;
+			case 'PM':
+				
+				break;
+			case 'join':
+				
+				break;
+			case 'leave':
+				
+				break;
+			case 'connect':
+				this.events.connect = callback;
+				break;
+			case 'disconnect':
+				this.events.disconnect = callback;
+				break;
+			case 'raw':
+				this.events.raw = callback;
+				break;
+			default:
+				// code
 		}
 	};
 	
@@ -20,14 +71,24 @@ function irc (ip,port,name) {
 		if(data.toString().indexOf(':*** Checking Ident') > -1){
 			this.send("USER "+ this.nick +" "+ this.nick +" "+ this.nick +" :Made with CustomBot");
 			this.send("NICK "+ this.nick);
-			this.send("JOIN "+ '#bottesting');
 			
 		}
-		
 	}.bind(this));
 	
 	this.client.on('data', function(data){
+		this.events.raw(data);
 		console.log('I<' + data.toString());
+		if(data.toString().indexOf(':*** Checking Ident') > -1){
+			this.send("USER "+ this.nick +" "+ this.nick +" "+ this.nick +" :Made with CustomBot");
+			this.send("NICK "+ this.nick);
+		}
+		if(data.toString().indexOf(" :End of /MOTD command.") > -1 && !this.connected){
+			this.events.connect();
+			this.connected = true;
+		}
+		if(data.toString().indexOf('PING :') > -1){
+			this.send("PONG :"+ data.toString().replace("PING :", ""));
+		}
 	}.bind(this));
 
  
@@ -41,7 +102,18 @@ function irc (ip,port,name) {
 
 
 
-var bot = new irc('irc.alphachat.net',6667,'irclib2');
+var bot = new irc('irc.alphachat.net',6667,'ircapitest');
+
+bot.on('raw', function(data){
+	console.log('Data recived: ' + data);
+});
+
+bot.on('connect', function(){
+	bot.join('#bottesting');
+	setTimeout(function(){
+		bot.say('#bottesting', 'Connection Succesfull');
+	},1000);
+});
 
 /*
 
