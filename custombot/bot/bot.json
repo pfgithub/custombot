@@ -1,0 +1,73 @@
+{
+  "settings": {
+    "nick": "custombot",
+    "ip": "irc.alphachat.net",
+    "port": 6667,
+    "prefix": "<"
+  },
+  "commands": {
+    "kill": {
+      "command": "kill",
+      "args": {
+        "params": [],
+        "calc": []
+      },
+      "actions":[
+        {"type": "raw",
+        "perms": "all",
+        "params": {
+          "data": "QUIT :Kill command used by $$NICK$$"
+        }}
+      ]
+    },
+    "help": {
+      "command": "help",
+      "args": {
+        "params": [],
+        "calc": []
+      },
+      "actions": [
+        {
+          "type": "multiline-chat",
+          "perms": "chanop",
+          "params": {
+            "channel": "$$NICK$$",
+            "message": [
+              "No help available",
+              "Instead, you get a multiline privmsg"
+            ]
+          }
+        },
+        {
+          "type": "chat",
+          "perms": "chanop",
+          "params": {
+            "channel": "$$CHANNEL$$",
+            "message": "Help information sent to $$NICK$$"
+          }
+        }
+      ]
+    },
+    "seen": {
+      "command": "seen",
+      "args": {
+        "params": [{"id":"string1"}],
+        "calc": [{
+          "id":"lastseen",
+          "type":"lastseen",
+          "params":{"user": "$$string1$$"}
+        }]
+      },
+      "actions":[{
+      "type": "chat",
+      "perms": "all",
+      "params": {
+        "channel": "$$CHANNEL$$",
+        "message": "$$string1$$ was last seen $$lastseen$$"
+      }}]
+    }
+  },
+  "channels": [
+    "#ircbots"
+  ]
+}

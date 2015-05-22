@@ -7,7 +7,7 @@ if (typeof String.prototype.startsWith != 'function') {
   };
 }
 
-function irc (ip,port,name) {
+exports.irc = function(ip,port,name) {
 	this.client = new net.Socket();
 	this.nick = name;
 	this.events = {
@@ -143,33 +143,6 @@ function irc (ip,port,name) {
 }
 
 
-
-var bot = new irc('irc.alphachat.net',6667,'ircapitest');
-
-bot.on('raw', function(data){
-	console.log('Data recived: ' + data);
-});
-
-bot.on('connect', function(){
-	bot.join('#bottesting');
-	setTimeout(function(){
-		bot.say('#bottesting', 'Connection Succesfull');
-	},1000);
-});
-
-bot.on('chat', function(message,user,channel){
-	console.log('chat: ' + message);
-	if(message == 'data sent'){
-		bot.say(channel,'data recived from ' + user.nick);
-	}
-});
-
-bot.on('pm', function(message,user,channel){
-	console.log('pm: ' + message);
-	if(message == 'data sent'){
-		bot.say(user.nick,'data recived from ' + user.nick);
-	}
-});
 
 /*
 

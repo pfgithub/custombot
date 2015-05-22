@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A tool for creating custom IRC bots",
   "dependencies": {
+    "moment": "^2.10.3"
   },
   "repository": {
     "type": "git",
