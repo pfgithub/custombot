@@ -1,5 +1,20 @@
-# Custombot (0%)
-A tool for easily creating IRC bots
+# Custombot
+Getting things ready:
+
+`cd api;npm install;cd ../custombot;npm install;`
+
+Running:
+
+`cd custombot`
+
+`node index.js`
+
+
+
+
+
+
+
 
 ## Usage
 No work has been done at custombot at this time.
