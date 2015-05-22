@@ -54,7 +54,7 @@ bot.on('chat', function(message,user,channel){
 			cmd.actions.forEach(function(action){
 				console.log(cmd);
 				cmd.args.params.forEach(function(bit,i){
-					dataParser.push({id:bit.id, val:msg[i + 1]});
+					dataParser.push({id:bit, val:msg[i + 1]});
 				});
 				cmd.args.calc.forEach(function(bit,i){
 					var val = '';

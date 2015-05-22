@@ -51,35 +51,8 @@ exports.irc = function(ip,port,name) {
 		}
 	};*/
 	
-	this.send = function(data){
-		if(this.client.writable){
-			this.client.write(data + '\n', 'ascii', function(err){
-				if(err){
-					console.log(err);
-				}else{
-					console.log("I>"+data);
-				}
-			});
-		}else{
-			console.log('ERROR - Socket not writable');
-		}
-	};
 	
-	this.command = function(command, data, message){
-		this.send(command.toUpperCase() + ' ' + data + (message === undefined ? '' : (' :' + message)));
-	};
 	
-	this.say = function(channel, message){
-		this.command('privmsg', channel, message);
-	};
-	
-	this.join = function(channel){
-		this.command('join', channel);
-	};
-	
-	this.part = function(channel){
-		this.command('part', channel);
-	};
 	
 	this.client.connect(port, ip);
 	
@@ -148,6 +121,36 @@ exports.irc = function(ip,port,name) {
 };
 util.inherits(exports.irc, EventEmitter);
 
+exports.irc.prototype.send = function(data){
+	if(this.client.writable){
+		this.client.write(data + '\n', 'ascii', function(err){
+			if(err){
+				console.log(err);
+			}else{
+				console.log("I>"+data);
+			}
+		});
+	}else{
+		console.log('ERROR - Socket not writable');
+	}
+};
+
+
+exports.irc.prototype.command = function(command, data, message){
+	this.send(command.toUpperCase() + ' ' + data + (message === undefined ? '' : (' :' + message)));
+};
+
+exports.irc.prototype.say = function(channel, message){
+	this.command('privmsg', channel, message);
+};
+
+exports.irc.prototype.join = function(channel){
+	this.command('join', channel);
+};
+
+exports.irc.prototype.part = function(channel){
+	this.command('part', channel);
+};
 
 /*
 

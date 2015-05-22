@@ -20,6 +20,20 @@
         }}
       ]
     },
+    "join": {
+      "command": "join",
+      "args": {
+        "params": ["str1"],
+        "calc": []
+      },
+      "actions":[
+        {"type": "raw",
+        "perms": "all",
+        "params": {
+          "data": "JOIN $$str1$$"
+        }}
+      ]
+    },
     "help": {
       "command": "help",
       "args": {
@@ -51,7 +65,7 @@
     "seen": {
       "command": "seen",
       "args": {
-        "params": [{"id":"string1"}],
+        "params": ["string1"],
         "calc": [{
           "id":"lastseen",
           "type":"lastseen",
