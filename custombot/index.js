@@ -6,7 +6,7 @@ var moment = require('moment');
 //var obj = JSON.parse(fs.readFileSync(__dirname + '/bot/bot.json', 'utf8'));
 var obj = require(__dirname + '/bot/bot.json', 'utf8');
 
-var bot = new irc.irc(obj.settings.ip, obj.settings.port, 'custombot');
+var bot = new irc.irc(obj.settings.ip, obj.settings.port, obj.settings.nick);
 
 
 var lastSeen = {};
