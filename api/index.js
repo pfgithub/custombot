@@ -1,5 +1,8 @@
 var net = require('net');
 var parse = require('irc-message').parse;
+var util = require('util');
+
+var EventEmitter = require('events').EventEmitter;
 
 if (typeof String.prototype.startsWith != 'function') {
   String.prototype.startsWith = function (str){
@@ -8,18 +11,19 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 exports.irc = function(ip,port,name) {
+	EventEmitter.call(this);
 	this.client = new net.Socket();
 	this.nick = name;
-	this.events = {
+	/*this.events = {
 		chat: function(){},
 		pm: function(){},
 		connect: function(){},
 		disconnect: function(){},
 		raw: function(){}
-	};
+	};*/
 	this.connected = false;
 	
-	this.on = function(event,callback){
+	/*this.on = function(event,callback){
 		switch (event) {
 			case 'chat':
 				this.events.chat = callback;
@@ -45,7 +49,7 @@ exports.irc = function(ip,port,name) {
 			default:
 				// code
 		}
-	};
+	};*/
 	
 	this.send = function(data){
 		if(this.client.writable){
@@ -90,14 +94,14 @@ exports.irc = function(ip,port,name) {
 	}.bind(this));
 	
 	this.client.on('data', function(data){
-		this.events.raw(data);
+		this.emit('raw',data);
 		console.log('I<' + data.toString());
 		if(data.toString().indexOf(':*** Checking Ident') > -1){
 			this.send("USER "+ this.nick +" "+ this.nick +" "+ this.nick +" :Made with CustomBot");
 			this.send("NICK "+ this.nick);
 		}
 		if(data.toString().indexOf(" :End of /MOTD command.") > -1 && !this.connected){
-			this.events.connect();
+			this.emit('connect');
 			this.connected = true;
 		}
 		if(data.toString().indexOf('PING :') > -1){
@@ -116,9 +120,9 @@ exports.irc = function(ip,port,name) {
 					case 'PRIVMSG':
 						var fulldata = [parsed.params[1].replace('\r',''),{raw:parsed.prefix,nick:parsed.prefix.split('!')[0]},parsed.params[0]];
 						if(parsed.params[0].startsWith('#')){
-							this.events.chat(fulldata[0],fulldata[1],fulldata[2]);
+							this.emit('chat',fulldata[0],fulldata[1],fulldata[2]);
 						}else{
-							this.events.pm(fulldata[0],fulldata[1],fulldata[2]);
+							this.emit('pm',fulldata[0],fulldata[1],fulldata[2]);
 						}
 						console.log(fulldata[0]);
 						console.log(fulldata[1]);
@@ -136,12 +140,13 @@ exports.irc = function(ip,port,name) {
  
 	this.client.on('close', function() {
 		console.log('Connection closed');
+		this.emit('disconnect');
 	});
 	
 	this.client.setEncoding('ascii');
 	this.client.setNoDelay();
-}
-
+};
+util.inherits(exports.irc, EventEmitter);
 
 
 /*

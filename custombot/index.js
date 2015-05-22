@@ -26,9 +26,6 @@ bot.on('connect', function(){
 	obj.channels.forEach(function(channel){
 		bot.join(channel);
 	});
-	setTimeout(function(){
-		bot.say('#bottesting', 'Connection Succesfull');
-	},1000);
 });
 
 
